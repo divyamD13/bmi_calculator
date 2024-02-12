@@ -13,6 +13,7 @@ class _HomePageState extends State<HomePage> {
   var wtController = TextEditingController();
   double ftvalue=0;
   double inchvalue=0;
+  var result = "";
   
   
   @override
@@ -37,9 +38,9 @@ class _HomePageState extends State<HomePage> {
               ),)
             ],
           ))),
-           body:  Expanded(
-                   child: Center(
-                     child: Column(
+           body:  
+                   
+                      Column(
                                mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                       const SizedBox(height: 10,),
@@ -61,6 +62,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(12),
                             )
                           ),
+                          keyboardType: TextInputType.number,
                            ),
                         ) ,
                         const SizedBox(height: 7,),
@@ -81,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                               max:10,
                               divisions: 10,
                               label: ftvalue.round().toString(),
-                              onChanged:(value)=>setState(()=> this.ftvalue = value)),
+                              onChanged:(double value)=>setState(()=> ftvalue = value)),
                             const Text('Inches',style:TextStyle(
                             fontSize:15,
                            )),
@@ -92,20 +94,57 @@ class _HomePageState extends State<HomePage> {
                               max:12,
                               divisions: 12,
                                label: inchvalue.round().toString(),
-                              onChanged:(value)=>setState(()=> this.inchvalue = value)),
+                              onChanged:(double  value)=>setState(()=> inchvalue = value)),
                               const SizedBox(height: 7,),
                               ElevatedButton(
                                 onPressed: ()
                                 {
-                                  Navigator.push(
-                                       context, 
-                                      MaterialPageRoute(builder: (context)=>ResultPage()));
+                                  var wt=wtController.text.toString();
+                                  var ft=ftvalue.toString();
+                                  var inch =inchvalue.toString();
+                                  if(wt !="" && ft !="" && inch!=""){
+                                     
+                                     var iWt= int.parse(wt);
+                                     var iFt=double.parse(ft);
+                                     var iInch=double.parse(inch);
+
+
+                                     var tInch= (iFt*12)+iInch;
+
+                                     var tCm= tInch*2.54;
+
+                                     var tM = tCm/100;
+
+                                     var bmi = iWt/(tM*tM);
+
+                                     setState(() {
+                                       result="Your BMI is $bmi";
+                                     });
+
+                                  }
+                                  else{
+                                     setState(() {
+                                       result="Please! fill all required details";
+                                     });
+                                  }
+                                  // Navigator.push(
+                                  //      context, 
+                                  //     MaterialPageRoute(builder: (context)=>ResultPage()));
                                 },
-                                 child: Text("Calculate",style:TextStyle(fontSize:20)))
+                                 child: Text("Calculate",style:TextStyle(fontSize:20))),
+
+                                 const SizedBox(height: 7,),
+
+                                 Text(result, 
+                                 style:TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.red,
+                                 )
+                                 )
+
                                  ],),
-                   )
-           ),
-      );
+                   );
+           
     
   }
 }
