@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   double ftvalue=0;
   double inchvalue=0;
   var result = "";
-  
+  var bmi=0.0;
   
   @override
   Widget build(BuildContext context) {
@@ -115,11 +115,33 @@ class _HomePageState extends State<HomePage> {
 
                                      var tM = tCm/100;
 
-                                     var bmi = iWt/(tM*tM);
+                                      bmi = iWt/(tM*tM);
+
+                                      var msg ="";
+                                      var bgcolor;
+                                      if(bmi<18){
+                                        msg="You are UNDERWEIGHT";
+                                        bgcolor=Colors.yellow.shade300;
+                                      }
+                                      else if(bmi>=18 && bmi<25){
+                                        msg="You are HEALTHY";
+                                        bgcolor=Colors.green;
+                                      }
+                                      else if(bmi>=25 && bmi<30){
+                                        msg="You are OVERWEIGHT";
+                                        bgcolor=Colors.orange.shade400;
+                                      }
+                                      else{
+                                        msg="You are OBESE";
+                                        bgcolor=Colors.red.shade400;
+                                      }
 
                                      setState(() {
                                        result="Your BMI is $bmi";
                                      });
+                                      Navigator.push(
+                                       context, 
+                                      MaterialPageRoute(builder: (context)=>ResultPage(bmi.toDouble(),msg.toString(),bgcolor)));
 
                                   }
                                   else{
@@ -127,20 +149,27 @@ class _HomePageState extends State<HomePage> {
                                        result="Please! fill all required details";
                                      });
                                   }
-                                  // Navigator.push(
-                                  //      context, 
-                                  //     MaterialPageRoute(builder: (context)=>ResultPage()));
+                                 
                                 },
-                                 child: Text("Calculate",style:TextStyle(fontSize:20))),
+                                 child: Text("Calculate",style:TextStyle(fontSize:20)),
+                                  style: ElevatedButton.styleFrom(
+                                   backgroundColor: Colors.green.shade400,
+                                   foregroundColor: Colors.black,
+                                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                                    textStyle: TextStyle(
+                                    fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                                 
+                                 ),
 
                                  const SizedBox(height: 7,),
 
-                                 Text(result, 
-                                 style:TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.red,
-                                 )
-                                 )
+                                //   Text(result, 
+                                //  style:TextStyle(
+                                //   fontSize: 20,
+                                //   color: Colors.red,
+                                //  )
+                                //  )
 
                                  ],),
                    );
